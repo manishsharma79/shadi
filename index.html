@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prinshi — A Gift from Manish</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400;1,600&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap');
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --ink:#0e0508;
+  --parchment:#fdf0e0;
+  --gold:#c8973a;
+  --gold-lt:#e8c07a;
+  --rose:#b85068;
+  --rose-lt:#e8899a;
+  --blush:#f5dde4;
+  --dust:#7a5560;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* STARS */
+#ambience{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:#fff;border-radius:50%;animation:starPulse ease-in-out infinite}
+@keyframes starPulse{0%,100%{opacity:.06;transform:scale(1)}50%{opacity:.7;transform:scale(1.6)}}
+.petal{position:absolute;border-radius:60% 0 60% 0;animation:petalDrift linear infinite;opacity:0}
+@keyframes petalDrift{
+  0%{transform:translateY(-30px) rotate(0deg);opacity:0}
+  6%{opacity:.85}88%{opacity:.45}
+  100%{transform:translateY(108vh) rotate(600deg) translateX(55px);opacity:0}
+}
+
+/* GIFT SCREEN */
+#gift-screen{
+  position:fixed;inset:0;z-index:100;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 60%,#2d0d18 0%,#0e0508 70%);
+  transition:opacity .9s ease,visibility .9s ease;
+}
+#gift-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+.gift-pre-text{
+  font-family:Georgia,serif;font-size:.75rem;letter-spacing:.5em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:40px;
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+
+.gift-box-wrap{position:relative;cursor:pointer;user-select:none}
+.gift-box-wrap:hover .box-body{filter:drop-shadow(0 0 28px rgba(200,151,58,.6))}
+.gift-box-wrap:hover .box-lid{transform:translateY(-8px) rotate(-2deg)}
+
+.box-body{
+  width:180px;height:160px;
+  background:linear-gradient(145deg,#7a1a2e,#4a0d1a);
+  border:2px solid var(--gold);border-radius:4px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+  transition:filter .3s;
+}
+.box-body::before{content:'';position:absolute;left:50%;transform:translateX(-50%);width:2px;height:100%;background:linear-gradient(to bottom,var(--gold),var(--gold-lt),var(--gold))}
+.box-body::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:100%;height:2px;background:linear-gradient(to right,var(--gold),var(--gold-lt),var(--gold))}
+.box-label{font-family:Georgia,serif;font-style:italic;font-size:1rem;color:var(--gold-lt);z-index:1;text-align:center;line-height:1.6}
+
+.box-lid{
+  width:196px;height:50px;
+  background:linear-gradient(145deg,#9a2238,#6a1020);
+  border:2px solid var(--gold);border-radius:4px;
+  position:absolute;top:-44px;left:-10px;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;justify-content:center;
+}
+.box-lid::before{content:'';position:absolute;left:50%;transform:translateX(-50%);width:2px;height:100%;background:var(--gold)}
+
+.bow{position:absolute;top:-22px;left:50%;transform:translateX(-50%)}
+.bow-loop{width:32px;height:20px;border:2px solid var(--gold-lt);border-radius:50%;position:absolute;top:0}
+.bow-loop.left{right:12px;transform:rotate(-30deg)}
+.bow-loop.right{left:12px;transform:rotate(30deg)}
+.bow-knot{width:12px;height:12px;background:var(--gold);border-radius:50%;position:absolute;top:4px;left:50%;transform:translateX(-50%);z-index:1;box-shadow:0 0 12px rgba(200,151,58,.8)}
+
+.gift-hint{margin-top:36px;font-family:Georgia,serif;font-size:.65rem;letter-spacing:.45em;text-transform:uppercase;color:var(--dust);animation:breathe 2s ease-in-out infinite}
+
+/* MAIN CONTENT */
+#main-content{position:relative;z-index:2}
+
+/* HERO */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:80px 24px;
+  background:radial-gradient(ellipse at 50% 55%,#350c1a 0%,#0e0508 72%);
+}
+.hero-eyebrow{font-family:Georgia,serif;font-size:.68rem;letter-spacing:.6em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:0;animation:riseIn .9s .2s forwards}
+.hero-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(4.5rem,16vw,10rem);line-height:.95;
+  background:linear-gradient(150deg,#f0d8a0 0%,var(--gold) 30%,#f0b0c0 65%,var(--rose) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 50px rgba(200,151,58,.25));
+  opacity:0;animation:riseIn 1.2s .5s forwards;
+}
+.hero-amp{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.6rem,4.5vw,3rem);color:var(--rose-lt);-webkit-text-fill-color:var(--rose-lt);display:block;margin:8px 0}
+.hero-tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.4rem);color:var(--blush);opacity:0;animation:riseIn 1s 1s forwards;margin-top:10px;line-height:1.6}
+.hero-rule{display:flex;align-items:center;gap:16px;margin:28px 0;opacity:0;animation:riseIn .9s 1.4s forwards}
+.hero-rule hr{width:60px;border:none;border-top:1px solid #c8973a55}
+.hero-rule span{font-size:.65rem;letter-spacing:.5em;color:var(--dust);text-transform:uppercase}
+.scroll-guide{position:absolute;bottom:32px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:riseIn .9s 2s forwards}
+.scroll-guide span{font-size:.58rem;letter-spacing:.5em;text-transform:uppercase;color:var(--dust)}
+.scroll-needle{width:1px;height:55px;background:linear-gradient(to bottom,var(--gold),transparent);animation:needleFlow 2s ease-in-out infinite}
+@keyframes needleFlow{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* CHAPTER */
+.chapter{padding:100px 24px 80px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:2;background:linear-gradient(180deg,#0e0508 0%,#1a0810 100%)}
+.ch-eyebrow{font-family:Georgia,serif;font-size:.6rem;letter-spacing:.65em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.ch-icon{font-size:3.6rem;margin-bottom:18px;filter:drop-shadow(0 0 18px rgba(200,151,58,.45));animation:iconFloat 4s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.ch-heading{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2rem,6.5vw,4rem);color:var(--parchment);line-height:1.15;margin-bottom:32px}
+.ch-heading em{font-style:italic;color:var(--gold-lt)}
+
+/* QUOTE CARD */
+.q-card{
+  max-width:600px;width:100%;padding:44px 40px;
+  border:1px solid rgba(200,151,58,.2);border-radius:2px;
+  position:relative;margin-bottom:28px;
+  background:linear-gradient(135deg,rgba(255,255,255,.025),rgba(200,151,58,.03));
+}
+.q-card::before{content:'\201C';font-family:'Playfair Display',serif;font-size:7rem;color:var(--gold);opacity:.2;position:absolute;top:-28px;left:20px;line-height:1;pointer-events:none}
+.q-card::after{content:'\201D';font-family:'Playfair Display',serif;font-size:7rem;color:var(--gold);opacity:.2;position:absolute;bottom:-64px;right:20px;line-height:1;pointer-events:none}
+.q-main{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:clamp(1.1rem,2.6vw,1.5rem);line-height:1.85;color:var(--parchment)}
+.q-main .glow{color:var(--gold-lt);font-style:normal}
+.q-main .blush{color:var(--rose-lt);font-style:normal}
+.q-caption{font-family:Georgia,serif;font-size:.85rem;color:var(--dust);margin-top:18px;line-height:1.75;letter-spacing:.02em}
+
+/* SIDE QUOTES */
+.side-quotes{display:flex;flex-direction:column;gap:14px;max-width:560px;width:100%;margin-top:16px}
+.sq{padding:22px 28px;border-left:2px solid var(--gold);text-align:left;background:rgba(255,255,255,.018)}
+.sq p{font-style:italic;font-size:clamp(.95rem,2.2vw,1.1rem);color:var(--blush);line-height:1.7;font-family:'Playfair Display',Georgia,serif}
+.sq span{display:block;font-family:Georgia,serif;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dust);margin-top:8px}
+
+/* ORNAMENT */
+.orn{display:flex;align-items:center;gap:14px;margin:50px 0 36px}
+.orn hr{width:70px;border:none;border-top:1px solid rgba(200,151,58,.35)}
+.orn-sym{color:var(--gold);font-size:1rem;letter-spacing:.2em}
+
+/* LETTER */
+#letter{padding:100px 24px;background:radial-gradient(ellipse at 50% 45%,#280a14 0%,#0e0508 75%);display:flex;flex-direction:column;align-items:center;position:relative;z-index:2}
+.letter-label{font-family:Georgia,serif;font-size:.65rem;letter-spacing:.6em;text-transform:uppercase;color:var(--gold);margin-bottom:36px}
+.letter-wrap{max-width:640px;width:100%;position:relative}
+.wax-seal{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c83050,#8a1030);border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.6rem;position:absolute;top:-32px;left:50%;transform:translateX(-50%);box-shadow:0 4px 20px rgba(200,0,50,.4),0 0 0 4px rgba(200,151,58,.15);z-index:2}
+.letter-paper{border:1px solid rgba(200,151,58,.25);padding:64px 44px 52px;background:linear-gradient(145deg,rgba(14,5,8,.95),rgba(30,8,18,.85));position:relative}
+.letter-paper::before{content:'';position:absolute;width:32px;height:32px;border-color:var(--gold);border-style:solid;top:-1px;left:-1px;border-width:2px 0 0 2px;opacity:.45}
+.letter-paper::after{content:'';position:absolute;width:32px;height:32px;border-color:var(--gold);border-style:solid;bottom:-1px;right:-1px;border-width:0 2px 2px 0;opacity:.45}
+.lp-corner-tr,.lp-corner-bl{position:absolute;width:32px;height:32px;border-color:var(--gold);border-style:solid;opacity:.45}
+.lp-corner-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.lp-corner-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+.letter-salutation{font-family:Georgia,serif;font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--dust);margin-bottom:24px}
+.letter-body{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:clamp(1rem,2.3vw,1.25rem);line-height:2.1;color:var(--parchment)}
+.letter-body .hi{color:var(--gold-lt);font-style:normal}
+.letter-body .em{color:var(--rose-lt);font-style:normal}
+.letter-divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,151,58,.35),transparent);margin:32px 0}
+.letter-sign{text-align:right}
+.letter-sign p{font-family:Georgia,serif;font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dust)}
+.letter-sign .sig{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--gold);display:block;margin-top:6px;letter-spacing:.08em}
+
+/* FINALE */
+#finale{
+  padding:100px 24px;min-height:70vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,#3a0f20 0%,#0e0508 65%);
+  position:relative;z-index:2;text-align:center;
+}
+.finale-title{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(2.2rem,8vw,5.5rem);line-height:1.15;
+  background:linear-gradient(135deg,#f0d8a0,var(--gold),#f5b8c8,var(--rose),#f0d8a0);
+  background-size:250% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 5s linear infinite;
+}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:250% center}}
+.finale-verse{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(.95rem,2.4vw,1.3rem);color:var(--blush);margin-top:24px;line-height:1.9;max-width:520px}
+.finale-names{margin-top:32px;display:flex;align-items:center;gap:20px}
+.fn-name{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,2.2rem);color:var(--gold-lt)}
+.fn-heart{font-size:1.6rem;animation:heartBeat 1.5s ease-in-out infinite}
+@keyframes heartBeat{0%,100%{transform:scale(1)}25%{transform:scale(1.2)}75%{transform:scale(1.1)}}
+.finale-from{margin-top:28px;font-family:Georgia,serif;font-size:.65rem;letter-spacing:.5em;text-transform:uppercase;color:var(--dust)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .85s ease,transform .85s ease}
+.reveal.show{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.35s}
+.d4{transition-delay:.48s}.d5{transition-delay:.62s}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+/* CONFETTI */
+.conf{position:fixed;pointer-events:none;z-index:999;border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="ambience"></div>
+
+<!-- GIFT SCREEN -->
+<div id="gift-screen">
+  <p class="gift-pre-text">✦ &nbsp; Ek khaas tohfa &nbsp; ✦</p>
+  <div class="gift-box-wrap" id="giftBox" onclick="openGift()">
+    <div class="box-lid" id="boxLid">
+      <div class="bow">
+        <div class="bow-loop left"></div>
+        <div class="bow-loop right"></div>
+        <div class="bow-knot"></div>
+      </div>
+    </div>
+    <div class="box-body">
+      <div class="box-label">Prinshi<br><small style="font-size:.75rem;opacity:.7">ke liye 🌸</small></div>
+    </div>
+  </div>
+  <p class="gift-hint">Click to open &nbsp; ✦</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">Manish ki taraf se &nbsp;·&nbsp; Dil se</p>
+    <h1 class="hero-name">
+      Prinshi
+      <span class="hero-amp">&amp; Sangeet</span>
+    </h1>
+    <p class="hero-tagline">ko
+    <div class="hero-rule">
+      <hr><span>Shaadi Mubarak</span><hr>
+    </div>
+    <div class="scroll-guide">
+      <span>Scroll</span>
+      <div class="scroll-needle"></div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 3 -->
+  <div class="chapter">
+    <p class="ch-eyebrow reveal">— Ek Nayi Shuruwat —</p>
+    <div class="ch-icon reveal d1">💍</div>
+    <h2 class="ch-heading reveal d2">Ab ek<br><em>Nayi Roshni</em></h2>
+
+    <div class="q-card reveal d3">
+      <p class="q-main">
+        "Yeh rishta kismet ne chuna hai —<br>
+        <span class="glow">aur jo insaan bachi se lekar aaj tak itni sundar bani,</span><br>
+        woh naye ghar mein bhi<br>
+        <span class="blush">apni roshni bikheregi, apni mehk chhod-egi —<br>
+        ek aisi wife jo Sangeet ki sabse badi taqat banegi.</span>"
+      </p>
+      <p class="q-caption">
+        Marriage sirf ek shaadi nahi —<br>
+        yeh do dilons ka ek khoobsurat imtahaan hai<br>
+        jo waqt ke saath mohabbat mein badal jaata hai.
+      </p>
+    </div>
+
+    <div class="side-quotes reveal d4">
+      <div class="sq">
+        <p>"Jo dosto mein sabse pehle samajhti thi — wahi Sangeet ka bhi dil samjhegi."</p>
+        <span>— Naya Ghar, Wahi Tu</span>
+      </div>
+      <div class="sq">
+        <p>"Sangeet bahut khushnaseeb hai — sach mein."</p>
+        <span>— Life Partner</span>
+      </div>
+      <div class="sq">
+        <p>"Naye ghar mein bhi tu wahi rahegi — sachchi, pyaari Prinshi."</p>
+        <span>— Best Wishes</span>
+      </div>
+    </div>
+
+    <div class="orn reveal d5">
+      <hr><span class="orn-sym">✦ &nbsp; ✦ &nbsp; ✦</span><hr>
+    </div>
+  </div>
+
+  <!-- LETTER -->
+  <section id="letter">
+    <p class="letter-label reveal">✦ &nbsp; Dost ka Khat &nbsp; ✦</p>
+    <div class="letter-wrap reveal d1">
+      <div class="wax-seal">🌸</div>
+      <div class="letter-paper">
+        <div class="lp-corner-tr"></div>
+        <div class="lp-corner-bl"></div>
+        <p class="letter-salutation">Meri pyaari dost Prinshi ke naam</p>
+        <p class="letter-body">
+
+          Aaj woh waqt aa gaya hai.<br>
+          Ek naya ghar, ek naya naam —<br>
+          aur ek <span class="em">nayi duniya jo teri raah dekh rahi hai.</span><br><br>
+
+        </p>
+        <div class="letter-divider"></div>
+        <div class="letter-sign">
+          <p>Dil ki gahraiyon se,</p>
+          <span class="sig">Manish 👑</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINALE -->
+  <section id="finale">
+    <h2 class="finale-title reveal">
+      Shaadi<br>Mubarak<br>Prinshi! 🌸
+    </h2>
+    <p class="finale-verse reveal d1">
+      "School ki woh hassi, ghar ka woh pyaar —<br>
+      ab ek nayi zindagi ka ho raha hai aghaz.<br>
+      <em>Khush raho, hamesha.</em>"
+    </p>
+    <div class="finale-names reveal d2">
+      <span class="fn-name">Prinshi</span>
+      <span class="fn-heart">💛</span>
+      <span class="fn-name">Sangeet</span>
+    </div>
+    <p class="finale-from reveal d3">With love &amp; duas from Manish</p>
+  </section>
+
+</div>
+
+<script>
+// Stars
+const amb = document.getElementById('ambience');
+for(let i=0;i<110;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const sz=Math.random()<.12?3:Math.random()<.35?2:1.5;
+  s.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;width:'+sz+'px;height:'+sz+'px;animation-duration:'+(2.5+Math.random()*5)+'s;animation-delay:'+(Math.random()*6)+'s';
+  amb.appendChild(s);
+}
+
+// Petals
+var petalColors=['#f2b8c6','#e896a8','#f5d0da','#d4748c'];
+for(let i=0;i<16;i++){
+  const p=document.createElement('div');
+  p.className='petal';
+  const sz=10+Math.random()*14;
+  p.style.cssText='left:'+Math.random()*100+'%;top:-30px;width:'+sz+'px;height:'+(sz*1.5)+'px;background:'+petalColors[Math.floor(Math.random()*petalColors.length)]+'cc;animation-duration:'+(7+Math.random()*10)+'s;animation-delay:'+(Math.random()*14)+'s;opacity:0';
+  document.body.appendChild(p);
+}
+
+// Gift open
+function openGift(){
+  var lid=document.getElementById('boxLid');
+  var screen=document.getElementById('gift-screen');
+  lid.style.transition='transform .5s cubic-bezier(.34,1.56,.64,1)';
+  lid.style.transform='translateY(-200px) rotate(-25deg)';
+  setTimeout(function(){confettiBurst(60)},200);
+  setTimeout(function(){screen.classList.add('hidden')},700);
+  setTimeout(function(){
+    document.body.style.overflowY='auto';
+    window.scrollTo({top:0,behavior:'instant'});
+  },900);
+}
+
+// Confetti
+var cColors=['#c8973a','#b85068','#f5dde4','#f0d8a0','#e8c07a','#fff'];
+function confettiBurst(count){
+  for(var i=0;i<count;i++){
+    var c=document.createElement('div');
+    c.className='conf';
+    var angle=Math.random()*360;
+    var dist=80+Math.random()*320;
+    var tx=Math.cos(angle*Math.PI/180)*dist;
+    var ty=Math.sin(angle*Math.PI/180)*dist-120;
+    var sz=4+Math.random()*8;
+    c.style.cssText='left:50%;top:50%;width:'+sz+'px;height:'+sz+'px;background:'+cColors[Math.floor(Math.random()*cColors.length)]+';border-radius:'+(Math.random()>.4?'50%':'2px')+';opacity:1;position:fixed;pointer-events:none;z-index:999';
+    document.body.appendChild(c);
+    (function(el,x,y){
+      setTimeout(function(){
+        el.style.transition='transform 1.4s cubic-bezier(.2,.8,.3,1), opacity 0.8s ease 0.5s';
+        el.style.transform='translate('+x+'px,'+y+'px) rotate('+(Math.random()*720)+'deg)';
+        el.style.opacity='0';
+      },10);
+      setTimeout(function(){el.remove()},2500);
+    })(c,tx,ty);
+  }
+}
+
+// Scroll reveal
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('show')});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+// Lock scroll on gift screen
+document.body.style.overflow='hidden';
+</script>
+</body>
+</html>
